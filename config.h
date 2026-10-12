@@ -297,6 +297,7 @@ static const Key keys[] = {
 	{ 0, XF86XK_TouchpadToggle,                    spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_TOGGLE) },
 	{ 0, XF86XK_TouchpadOff,                       spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_OFF) },
 	{ 0, XF86XK_TouchpadOn,                        spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_ON) },
+	{ MODKEY|ControlMask, XK_t,                      spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_TOGGLE) },
 	{ 0, XF86XK_MonBrightnessUp,                   spawn,                  {.v = (const char*[]){ "xbacklight", "-inc", "15", NULL } } },
 	{ 0, XF86XK_MonBrightnessDown,                 spawn,                  {.v = (const char*[]){ "xbacklight", "-dec", "15", NULL } } },
 
