@@ -52,9 +52,8 @@ static const Rule rules[] = {
 	/* class    instance      title       	 tags mask    isfloating   isterminal  noswallow  monitor */
 	{ "Gimp",     NULL,       NULL,          1 << 8,      0,           0,          0,         -1 },
 	{ "Microsoft-edge", NULL,  NULL,          1 << 8,      0,           0,          0,         -1 },
-	{ "et",       NULL,       NULL,          1 << 5,      0,           0,          0,         -1 },
-	{ "wps",      NULL,       NULL,          1 << 6,      0,           0,          0,         -1 },
-	{ "wpp",      NULL,       NULL,          1 << 7,      0,           0,          0,         -1 },
+	/* WPS 12: et/wps/wpp share class wpsoffice. User chose tag 6 for all three. */
+	{ "wpsoffice", NULL,      NULL,          1 << 5,      0,           0,          0,         -1 },
 	{ TERMCLASS,  NULL,       NULL,       	 0,           0,           1,          0,         -1 },
 	{ NULL,       NULL,       "Event Tester", 0,          0,           0,          1,         -1 },
 	{ TERMCLASS,  "floatterm", NULL,       	 0,           1,           1,          0,         -1 },
