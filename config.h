@@ -287,9 +287,16 @@ static const Key keys[] = {
 	{ 0, XF86XK_MyComputer,                        spawn,                  {.v = (const char*[]){ TERMINAL, "-e",  "lfub",  "/", NULL } } },
 	/* { 0, XF86XK_Battery,                        spawn,                  SHCMD("") }, */
 	{ 0, XF86XK_Launch1,                           spawn,                  {.v = (const char*[]){ "xset", "dpms", "force", "off", NULL } } },
-	{ 0, XF86XK_TouchpadToggle,                    spawn,                  SHCMD("(synclient | grep 'TouchpadOff.*1' && synclient TouchpadOff=0) || synclient TouchpadOff=1") },
-	{ 0, XF86XK_TouchpadOff,                       spawn,                  {.v = (const char*[]){ "synclient", "TouchpadOff=1", NULL } } },
-	{ 0, XF86XK_TouchpadOn,                        spawn,                  {.v = (const char*[]){ "synclient", "TouchpadOff=0", NULL } } },
+/* Name, not id: xinput ids change. ELAN last; that name can be a keyboard. */
+#define TOUCHPAD_FIND "pad=$(xinput list --name-only | grep -E -i -m1 'touchpad|synaptics'); " \
+	"[ -n \"$pad\" ] || pad=$(xinput list --name-only | grep -E -m1 'ELAN'); " \
+	"[ -n \"$pad\" ] || exit 1; "
+#define TOUCHPAD_OFF "xinput disable \"$pad\""
+#define TOUCHPAD_ON "xinput enable \"$pad\""
+#define TOUCHPAD_TOGGLE "if xinput list-props \"$pad\" | grep -Eq '^[[:space:]]*Device Enabled \\([0-9]+\\):[[:space:]]*1[[:space:]]*$'; then " TOUCHPAD_OFF "; else " TOUCHPAD_ON "; fi"
+	{ 0, XF86XK_TouchpadToggle,                    spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_TOGGLE) },
+	{ 0, XF86XK_TouchpadOff,                       spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_OFF) },
+	{ 0, XF86XK_TouchpadOn,                        spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_ON) },
 	{ 0, XF86XK_MonBrightnessUp,                   spawn,                  {.v = (const char*[]){ "xbacklight", "-inc", "15", NULL } } },
 	{ 0, XF86XK_MonBrightnessDown,                 spawn,                  {.v = (const char*[]){ "xbacklight", "-dec", "15", NULL } } },
 
