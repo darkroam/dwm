@@ -287,13 +287,15 @@ static const Key keys[] = {
 	{ 0, XF86XK_MyComputer,                        spawn,                  {.v = (const char*[]){ TERMINAL, "-e",  "lfub",  "/", NULL } } },
 	/* { 0, XF86XK_Battery,                        spawn,                  SHCMD("") }, */
 	{ 0, XF86XK_Launch1,                           spawn,                  {.v = (const char*[]){ "xset", "dpms", "force", "off", NULL } } },
-/* Name, not id: xinput ids change. ELAN last; that name can be a keyboard. */
+/* Name, not id: xinput ids change. ELAN last; that name can be a keyboard.
+ * Device Enabled removes the libinput device, so the touchpad cannot come back. */
+
 #define TOUCHPAD_FIND "pad=$(xinput list --name-only | grep -E -i -m1 'touchpad|synaptics'); " \
 	"[ -n \"$pad\" ] || pad=$(xinput list --name-only | grep -E -m1 'ELAN'); " \
 	"[ -n \"$pad\" ] || exit 1; "
-#define TOUCHPAD_OFF "xinput disable \"$pad\""
-#define TOUCHPAD_ON "xinput enable \"$pad\""
-#define TOUCHPAD_TOGGLE "if xinput list-props \"$pad\" | grep -Eq '^[[:space:]]*Device Enabled \\([0-9]+\\):[[:space:]]*1[[:space:]]*$'; then " TOUCHPAD_OFF "; else " TOUCHPAD_ON "; fi"
+#define TOUCHPAD_OFF "xinput set-prop \"$pad\" 'libinput Send Events Mode Enabled' 1 0"
+#define TOUCHPAD_ON "xinput set-prop \"$pad\" 'libinput Send Events Mode Enabled' 0 0"
+#define TOUCHPAD_TOGGLE "if xinput list-props \"$pad\" | grep -Eq '^[[:space:]]*libinput Send Events Mode Enabled \\([0-9]+\\):[[:space:]]*0,[[:space:]]*0[[:space:]]*$'; then " TOUCHPAD_OFF "; else " TOUCHPAD_ON "; fi"
 	{ 0, XF86XK_TouchpadToggle,                    spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_TOGGLE) },
 	{ 0, XF86XK_TouchpadOff,                       spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_OFF) },
 	{ 0, XF86XK_TouchpadOn,                        spawn,                  SHCMD(TOUCHPAD_FIND TOUCHPAD_ON) },
